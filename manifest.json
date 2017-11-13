@@ -9,7 +9,7 @@
              "128": "image/icon.128.png" },
   "content_scripts":  [{
       "matches": ["https://translate.google.com/*","https://translate.google.com.tw/*"],
-      "js": ["lib/jquery-3.1.0.min.js",
+      "js": ["lib/jquery-3.2.1.min.js",
              "content.js"],
 	  "css": [ "css/style.css"]
   }],

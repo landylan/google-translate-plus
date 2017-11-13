@@ -79,51 +79,10 @@ function showResult(data, notToTranslateInformation, sourceText){
         translatedResultList.push(translatedResult);
     }
 
-    var toShowResult = '<div class="extension_info">' +
-                       '<p class="extension_name"><b>Google Translate Plus</b></p>' +
-                       '<a href="https://www.bart.com.hk?from=t-p">' +
-                       '<img class="bart_logo" ' +
-                       'title="Powered By Bart Soluions" ' +
-                       'src="http://gtranslateplus.com/bart-logo.24.png"/>' +
-                       '</a></div><div class="result_header">' +
-                       '<p class="result_title">' +
-                       translatedResultList.pop().replace('</ span>', '</span>') +
-                       '</p></div>';
-
-    var posIndexs = notToTranslateInformation.posIndexs;
-    var posCount = posIndexs.length;
-    var definitionCount = translatedResultList.length - posCount - 1;
-    var index = 0;
-    for (i = 0; i < definitionCount; i++){
-        if (index < posCount && (i === 0 || posIndexs.indexOf(i) > -1)){
-            toShowResult += '<p class="definition_pos">' +
-                            translatedResultList[definitionCount + index] + 
-                            '</p>';
-            index ++;
-        }
-
-        var synonyms = notToTranslateInformation.synonyms;
-        var translatedSynonyms = '';
-        if (synonyms[i]) {
-            translatedSynonyms = translatedResultList.slice(-1).pop();
-        }
-
-        toShowResult += '<div class="translated_text">' +
-                        '<p class="translated_definition">' +
-                        translatedResultList[i] +
-                        '</p><p class="definition_example">' +
-                        notToTranslateInformation.examples[i] +
-                        '</p><p class="definition_synonyms">' +
-                        translatedSynonyms + synonyms[i] + '</div>';
-    }
-
-    var showDom = $(toShowResult);
-
-    //change translated source text to original source text
-    showDom.find('#gtp_bart').text(sourceText);
-    $('#definition_translated_result').append(showDom);
-
-    $( ".cd-expand-button" ).click();
+    $('.gt-cd-c > .gt-def-list .gt-def-info > .gt-def-row').each(function(){
+      ori_text = $(this).text();
+      $(this).after('<div class="gtp-def-info">'+translatedResultList.shift()+'</div>');
+    });
 }
 
 function translateDefinition(){
@@ -134,15 +93,10 @@ function translateDefinition(){
 
     gLastUrl = currentUrl;
 
-    $('#definition_translated_result').remove();
-
     if ($('.gt-cd-md:visible').length){
         var languages = currentUrl.split('#')[1].split('/');
         var fromLanguage = languages[0];
         var toLanguage = languages[1];
-
-        $('.gt-cc-r').before(
-            '<div id="definition_translated_result" class="gt-cc-r"></div>');
 
         var sourceText = $(
                 '.gt-cd-md > .gt-cd-t > .gt-cd-tl > div > span').text();
